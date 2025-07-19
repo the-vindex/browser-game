@@ -31,6 +31,7 @@ export class MainScene extends Phaser.Scene {
         A: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
         S: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
         D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+        SPACE: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
     };
 
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {

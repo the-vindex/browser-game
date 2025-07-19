@@ -8,6 +8,11 @@ export class Player extends Phaser.GameObjects.Container {
     private isRecharging: boolean = false;
     private rechargeStartTime: number = 0;
     private rechargeDuration: number = 500; // 0.5 seconds
+    private isStrafing: boolean = false;
+    private lastStrafeTime: number = 0;
+    private strafeCooldown: number = 1000; // 1 second
+    private strafeDuration: number = 100; // 0.1 seconds
+    private strafeSpeed: number = 100;
 
     public GUN_COLOR_READY = 0xffffff;
 
@@ -43,6 +48,10 @@ export class Player extends Phaser.GameObjects.Container {
     }
 
     public update(keys: { [key: string]: Phaser.Input.Keyboard.Key }, mouseX: number, mouseY: number) {
+        if (this.isStrafing) {
+            // Disable movement and rotation updates while strafing
+            return;
+        }
         const speed = 2;
 
         if (keys.A.isDown) {
@@ -56,6 +65,43 @@ export class Player extends Phaser.GameObjects.Container {
         }
         if (keys.S.isDown) {
             this.y += speed;
+        }
+
+        if (keys.SPACE.isDown && !this.isStrafing && this.scene.time.now - this.lastStrafeTime > this.strafeCooldown) {
+            const isMoving = keys.W.isDown || keys.A.isDown || keys.S.isDown || keys.D.isDown;
+            if (isMoving) {
+                this.isStrafing = true;
+                this.lastStrafeTime = this.scene.time.now;
+
+                let strafeX = 0;
+                let strafeY = 0;
+
+                if (keys.W.isDown) strafeY = -1;
+                if (keys.S.isDown) strafeY = 1;
+                if (keys.A.isDown) strafeX = -1;
+                if (keys.D.isDown) strafeX = 1;
+
+                // Normalize diagonal strafe
+                if (strafeX !== 0 && strafeY !== 0) {
+                    const length = Math.sqrt(strafeX * strafeX + strafeY * strafeY);
+                    strafeX /= length;
+                    strafeY /= length;
+                }
+
+                const strafeTargetX = this.x + strafeX * this.strafeSpeed;
+                const strafeTargetY = this.y + strafeY * this.strafeSpeed;
+
+                this.scene.tweens.add({
+                    targets: this,
+                    x: strafeTargetX,
+                    y: strafeTargetY,
+                    duration: this.strafeDuration,
+                    ease: 'Power2',
+                    onComplete: () => {
+                        this.isStrafing = false;
+                    }
+                });
+            }
         }
 
         const angle = Phaser.Math.Angle.Between(this.x, this.y, mouseX, mouseY);
