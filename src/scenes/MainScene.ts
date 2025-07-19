@@ -15,6 +15,9 @@ export class MainScene extends Phaser.Scene {
     const canvas = this.sys.game.canvas;
     canvas.style.border = '2px solid white';
 
+    // Add background image
+    this.add.image(0, 0, 'grass_background').setOrigin(0).setDisplaySize(canvas.width, canvas.height);
+
     this.physics.world.setBoundsCollision(true,true,true,true);
 
     this.player = new Player(this, 400, 300);

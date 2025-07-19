@@ -6,7 +6,8 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   preload() {
-    // Load assets here
+    this.load.image('grass_background', 'assets/cartoon_green_texture_grass.jpg');
+    this.load.image('marine_character', 'assets/marine_character.png');
   }
 
   create() {

@@ -3,9 +3,8 @@ import { Bullet } from './Bullet';
 import Color = Phaser.Display.Color;
 
 export class Player extends Phaser.GameObjects.Container {
-    private head: Phaser.GameObjects.Arc;
+    private playerBody: Phaser.GameObjects.Sprite;
     private gun: Phaser.GameObjects.Line;
-    private playerBody: Phaser.GameObjects.Line;
     private isRecharging: boolean = false;
     private rechargeStartTime: number = 0;
     private rechargeDuration: number = 500; // 0.5 seconds
@@ -15,12 +14,12 @@ export class Player extends Phaser.GameObjects.Container {
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y);
 
-        this.head = new Phaser.GameObjects.Arc(scene, 0, 0, 10, 0, 360, false, 0xffffff, 1);
+        this.playerBody = new Phaser.GameObjects.Sprite(scene, 0, 0, 'marine_character');
+        this.playerBody.setScale(0.05,0.05);
+        this.playerBody.setRotation(Math.PI);
         this.gun = new Phaser.GameObjects.Line(scene, 0, 0, 0, -20, 0, 20, 0xffffff);
-        // Gun points right (positive X) when rotation is 0
-        this.playerBody = new Phaser.GameObjects.Line(scene, 0, 0, 0, 0, 20, 0, 0xffffff);
 
-        this.add([this.head, this.gun, this.playerBody]);
+        this.add([this.playerBody, this.gun]);
 
         scene.add.existing(this);
     }
