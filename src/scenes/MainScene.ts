@@ -1,15 +1,43 @@
 import Phaser from 'phaser';
+import { Player } from '../game/Player';
+import { Bullet } from '../game/Bullet';
 
 export class MainScene extends Phaser.Scene {
+  private player!: Player;
+  private keys!: { [key: string]: Phaser.Input.Keyboard.Key };
+  private bullets!: Phaser.GameObjects.Group;
+
   constructor() {
     super({ key: 'MainScene' });
   }
 
   create() {
-    this.add.text(400, 300, 'Hello, World!', { font: '64px Arial', color: '#ffffff' }).setOrigin(0.5);
+    const canvas = this.sys.game.canvas;
+    canvas.style.border = '2px solid white';
+
+    this.player = new Player(this, 400, 300);
+    this.bullets = this.add.group();
+
+    if (!this.input.keyboard) {
+        throw new Error('Keyboard input is not available');
+    }
+    this.keys = {
+        W: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+        A: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+        S: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+        D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+    };
+
+    this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+        this.player.shoot(pointer.x, pointer.y, this.bullets);
+    });
   }
 
   update() {
-    // Game logic here
+    this.player.update(this.keys, this.input.activePointer.x, this.input.activePointer.y);
+
+    this.bullets.getChildren().forEach((bullet) => {
+        (bullet as Bullet).update();
+    });
   }
 }
