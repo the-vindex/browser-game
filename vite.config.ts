@@ -6,7 +6,7 @@ export default defineConfig({
     port: 8080
   },
   build: {
-    outDir: 'dist'
+    outDir: 'docs'
   },
   resolve: {
     alias: {
