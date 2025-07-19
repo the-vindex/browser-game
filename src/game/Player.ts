@@ -3,8 +3,8 @@ import { Bullet } from './Bullet';
 import Color = Phaser.Display.Color;
 
 export class Player extends Phaser.GameObjects.Container {
-    private playerBody: Phaser.GameObjects.Sprite;
-    private gun: Phaser.GameObjects.Line;
+    private readonly playerBody: Phaser.GameObjects.Sprite;
+    private readonly gun: Phaser.GameObjects.Line;
     private isRecharging: boolean = false;
     private rechargeStartTime: number = 0;
     private rechargeDuration: number = 500; // 0.5 seconds
