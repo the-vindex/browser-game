@@ -7,6 +7,7 @@ export class Bullet extends Phaser.GameObjects.Arc {
         super(scene, x, y, 5, 0, 360, false, 0xffff00, 1);
         scene.add.existing(this);
         scene.physics.world.enable(this);
+
     }
 
     public fire(targetX: number, targetY: number) {

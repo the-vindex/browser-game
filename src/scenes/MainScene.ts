@@ -15,6 +15,8 @@ export class MainScene extends Phaser.Scene {
     const canvas = this.sys.game.canvas;
     canvas.style.border = '2px solid white';
 
+    this.physics.world.setBoundsCollision(true,true,true,true);
+
     this.player = new Player(this, 400, 300);
     this.bullets = this.add.group();
 
